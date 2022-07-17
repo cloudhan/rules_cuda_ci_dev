@@ -1,6 +1,6 @@
 name: Test Utilities
 
-on: push
+# on: push
 
 jobs:
   test:
