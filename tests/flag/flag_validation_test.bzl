@@ -17,19 +17,19 @@ num_actions_test = analysistest.make(
     },
 )
 
+def has_flag(cmd, single_flag):
+    if (" " + single_flag + " ") in cmd:
+        return True
+    if cmd.endswith(" " + single_flag):
+        return True
+    return False
+
 def cuda_library_flag_test_impl(ctx):
     env = analysistest.begin(ctx)
     target_under_test = analysistest.target_under_test(env)
     actions = analysistest.target_actions(env)
 
     asserts.true(env, len(ctx.attr.contain_flags) + len(ctx.attr.not_contain_flags) > 0, "Invalid test config")
-
-    def has_flag(cmd, single_flag):
-        if (" " + single_flag + " ") in cmd:
-            return True
-        if cmd.endswith(" " + single_flag):
-            return True
-        return False
 
     has_matched_action = False
     has_name_match = True
