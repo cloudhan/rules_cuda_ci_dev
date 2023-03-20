@@ -42,11 +42,11 @@ jobs:
           name: "${{ matrix.docs.name }}"
           path: ${{ github.workspace }}/docs/site/
           if-no-files-found: error
-        if: ${{ github.event_name != 'pull_request' }}
+        # if: ${{ github.event_name != 'pull_request' }}
 
   publish:
     needs: pages
-    if: ${{ github.event_name != 'pull_request' }}
+    # if: ${{ github.event_name != 'pull_request' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
