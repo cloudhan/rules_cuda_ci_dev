@@ -41,8 +41,14 @@ jobs:
 
       - name: Set Visual Studio Environment (Windows)
         if: ${{ startsWith(matrix.os, 'windows') }}
-        run: .github/workflows/Set-VSEnv.ps1 2022
+        run: |
+          .github/workflows/Set-VSEnv.ps1 2022
+          echo $env:BAZEL_VC
+          echo $env:VCINSTALLDIR
 
-      - run: bazelisk test -- //tests/...
+      - run: |
+          echo $env:BAZEL_VC
+          echo $env:VCINSTALLDIR
+          bazelisk test -- //tests/...
 
       - run: bazelisk shutdown
