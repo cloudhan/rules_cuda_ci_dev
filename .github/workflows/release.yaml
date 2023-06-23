@@ -3,10 +3,10 @@
 # and put the release notes into the commit message for the tag.
 name: Release
 
-on:
-  push:
-    tags:
-      - "v*.*.*"
+# on:
+#   push:
+#     tags:
+#       - "v*.*.*"
 
 jobs:
   build:

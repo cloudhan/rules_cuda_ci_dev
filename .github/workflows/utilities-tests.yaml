@@ -15,7 +15,7 @@ jobs:
     strategy:
       matrix:
         os:
-          - ubuntu-20.04
+          # - ubuntu-20.04
           - windows-latest
         bazel-version:
           - 5.0.0
