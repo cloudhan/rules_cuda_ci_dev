@@ -43,12 +43,11 @@ jobs:
         if: ${{ startsWith(matrix.os, 'windows') }}
         run: |
           .github/workflows/Set-VSEnv.ps1 2022
+          echo "BAZEL_VC=$env:BAZEL_VC" >> $env:GITHUB_ENV
           echo $env:BAZEL_VC
-          echo $env:VCINSTALLDIR
 
       - run: |
           echo $env:BAZEL_VC
-          echo $env:VCINSTALLDIR
           bazelisk test -- //tests/...
 
       - run: bazelisk shutdown
