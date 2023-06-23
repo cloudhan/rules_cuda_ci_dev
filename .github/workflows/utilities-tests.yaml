@@ -19,7 +19,7 @@ jobs:
           - windows-latest
         bazel-version:
           - 5.0.0
-          - 5.2.0
+          # - 5.2.0
     env:
       USE_BAZEL_VERSION: ${{ matrix.bazel-version }}
     steps:

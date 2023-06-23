@@ -44,6 +44,9 @@ def _impl(ctx):
 
     cc_toolchain = find_cpp_toolchain(ctx)
 
+    print(cc_toolchain)
+    print(cc_toolchain.built_in_include_directories)
+    print(cc_toolchain.compiler_executable)
     nvcc_compile_env_feature = feature(
         name = "nvcc_compile_env",
         env_sets = [
