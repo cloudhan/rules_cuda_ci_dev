@@ -39,6 +39,10 @@ jobs:
           sub-packages: '["cudart"]'
           method: network
 
+      - name: Set Visual Studio Environment (Windows)
+        if: ${{ startsWith(matrix.os, 'windows') }}
+        run: .github/workflows/Set-VSEnv.ps1 2022
+
       - run: bazelisk test -- //tests/...
 
       - run: bazelisk shutdown
