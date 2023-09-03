@@ -12,6 +12,12 @@ inputs:
   source:
     description: "matrix.cases.source"
     required: true
+  toolchain:
+    description: "matrix.cases.toolchain"
+    required: false
+  toolchain-version:
+    description: "matrix.cases.toolchain-version"
+    required: false
 
 runs:
   using: "composite"

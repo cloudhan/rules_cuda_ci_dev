@@ -33,36 +33,37 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - uses: bazelbuild/setup-bazelisk@v2
+      - name: Mount bazel cache
+        if: ${{ !startsWith(matrix.cases.os, 'windows') }}
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/bazel
+          key: bazel-${{ matrix.cases.os }}-cuda-${{ matrix.cases.cuda-version }}-${{ hashFiles('.bazelversion') }}
+
       - uses: ./.github/actions/set-build-env
         with:
           os: ${{ matrix.cases.os }}
           cuda-version: ${{ matrix.cases.cuda-version }}
-          source: ${{ matrix.cases.not-exist }}
+          source: ${{ matrix.cases.source }}
+          toolchain: ${{ matrix.cases.toolchain }}
+          toolchain-version: ${{ matrix.cases.toolchain-version }}
 
-      # - uses: bazelbuild/setup-bazelisk@v2
-      # - name: Mount bazel cache
-      #   if: ${{ !startsWith(matrix.cases.os, 'windows') }}
-      #   uses: actions/cache@v3
-      #   with:
-      #     path: ~/.cache/bazel
-      #     key: bazel-${{ matrix.cases.os }}-cuda-${{ matrix.cases.cuda-version }}-${{ hashFiles('.bazelversion') }}
+      - name: Bazel build config for LLVM
+        if: ${{ !startsWith(matrix.cases.os, 'windows') && matrix.cases.toolchain == 'llvm' }}
+        run: |
+          echo "build --config=clang" > $HOME/.bazelrc
+          echo "build:clang --@rules_cuda//cuda:archs=sm_80" >> $HOME/.bazelrc
+          echo "build:clang --spawn_strategy=local" >> $HOME/.bazelrc
 
+      - run: bazelisk build @rules_cuda_examples//basic:all
+      - run: bazelisk build @rules_cuda_examples//rdc:all
+      - run: bazelisk build @rules_cuda_examples//if_cuda:main
+      - run: bazelisk build @rules_cuda_examples//if_cuda:main --enable_cuda=False
 
-      # - name: Bazel build config for LLVM
-      #   if: ${{ !startsWith(matrix.cases.os, 'windows') && matrix.cases.toolchain == 'llvm' }}
-      #   run: |
-      #     echo "build --config=clang" > $HOME/.bazelrc
-      #     echo "build:clang --@rules_cuda//cuda:archs=sm_80" >> $HOME/.bazelrc
-      #     echo "build:clang --spawn_strategy=local" >> $HOME/.bazelrc
+      - run: cd examples && bazelisk build //basic:all --config=bzlmod
+      - run: cd examples && bazelisk build //rdc:all --config=bzlmod
+      - run: cd examples && bazelisk build //if_cuda:main --config=bzlmod
+      - run: cd examples && bazelisk build //if_cuda:main --enable_cuda=False --config=bzlmod
 
-      # - run: bazelisk build @rules_cuda_examples//basic:all
-      # - run: bazelisk build @rules_cuda_examples//rdc:all
-      # - run: bazelisk build @rules_cuda_examples//if_cuda:main
-      # - run: bazelisk build @rules_cuda_examples//if_cuda:main --enable_cuda=False
-
-      # - run: cd examples && bazelisk build //basic:all --config=bzlmod
-      # - run: cd examples && bazelisk build //rdc:all --config=bzlmod
-      # - run: cd examples && bazelisk build //if_cuda:main --config=bzlmod
-      # - run: cd examples && bazelisk build //if_cuda:main --enable_cuda=False --config=bzlmod
-
-      # - run: bazelisk shutdown
+      - run: bazelisk shutdown
