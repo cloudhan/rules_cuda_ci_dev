@@ -35,7 +35,9 @@ jobs:
 
       - uses: ./.github/actions/set-build-env
         with:
-          case: ${{ matrix.cases }}
+          os: ${{ matrix.cases.os }}
+          cuda-version: ${{ matrix.cases.cuda-version }}
+          not-exist: ${{ matrix.cases.not-exist }}
 
       # - uses: bazelbuild/setup-bazelisk@v2
       # - name: Mount bazel cache

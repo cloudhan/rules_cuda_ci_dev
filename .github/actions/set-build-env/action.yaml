@@ -1,9 +1,13 @@
 
 name: "Setup Build Environment"
+description: ""
 
 inputs:
-  case:
-    description: "case from workflow matrix"
+  os:
+    description: "matrix.cases.os"
+    required: true
+  cuda-version:
+    description: "matrix.cases.cuda-version"
     required: true
 
 runs:
