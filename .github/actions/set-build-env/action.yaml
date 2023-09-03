@@ -9,6 +9,9 @@ inputs:
   cuda-version:
     description: "matrix.cases.cuda-version"
     required: true
+  source:
+    description: "matrix.cases.source"
+    required: true
 
 runs:
   using: "composite"
